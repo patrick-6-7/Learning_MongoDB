@@ -1,0 +1,5 @@
+scheema is where i define the structure.
+    using this scheema we make a model.
+        using that model we perform CRUD operations
+
+        

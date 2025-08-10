@@ -93,11 +93,12 @@ app.route("/user/:id")
         if(!userObject) return res.status(404).json({message: `no user found with id ${userId}`});
         const updatedData = req.body;
         await users.updateOne(
-            {$set: updatedData}
+            {id: userId},
+            {$set: updatedData},
         );
         return res.status(200).json({
             message: `${userObject.first_name} got updated!`,
-            updatedData
+            updatedUser: await users.findOne({id: userId}),
         });
          
     }catch{

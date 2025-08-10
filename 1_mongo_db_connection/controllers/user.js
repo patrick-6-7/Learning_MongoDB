@@ -1,41 +1,16 @@
-const express = require('express');
-const mongoose = require("mongoose");
+const { users } = require("../models/users.js");
 
-const app = express();
-const PORT = 8000;
+async function getAllUsersHandler(req, res){
+    try {
+        const allUsers = await users.find({}); 
+        return res.json(allUsers);
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        return res.status(500).json({message: "Error fetching users"});
+    }
+}
 
-//mongooose connection
-mongoose.connect("mongodb://127.0.0.1:27017/DB_CONNECTION")
-    .then(() => console.log("DB connected successfully"))
-    .catch((err) => console.log("failed to connect DB"));
-
-//middleware
-app.use(express.urlencoded({extended: false}));
-
-//let's create our scheema
-const userScheema = new mongoose.Schema({
-    last_name:  { type: String },
-    first_name: { type: String, required: true },
-    gender:     { type: String, required: true },
-    job_title:  { type: String, required: true },
-    email:      { type: String, required: true, unique: true },
-    id:         { type: Number, required: true, unique: true },
-});
-
-//now let's create model from our scheema
-const users = mongoose.model("users", userScheema);
-
-//routes
-app.get("/", (req, res) =>{
-    return res.end("welcome to our company");
-});
-
-app.get("/users", (req, res) =>{
-    return res.json(users);
-});
-
-app.route("/user/:id")
-.get(async (req, res) =>{
+async function getUserByIdHandler(req, res){
     try{
         const userId = parseInt(req.params.id);
         const userObject = await users.findOne({id: userId});
@@ -44,8 +19,9 @@ app.route("/user/:id")
     }catch{
         return res.status(500).json({message: "Error fetching user"});
     }
-})
-.post(async (req, res) => {
+}
+
+async function PostUserByIdHandler(req, res){
     try {
         const newUserData = req.body;
         const userId = parseInt(req.params.id);
@@ -70,22 +46,24 @@ app.route("/user/:id")
         console.error("Error creating user:", error);
         return res.status(500).json({message: "Internal server error"});
     }
-})
-.delete(async (req, res)=>{
+}
+
+async function DeleteUserByIdHandler(req, res){
     try{
         const userId = parseInt(req.params.id);
         const userObject = await users.findOne({id: userId});
         
         if(!userObject) return res.status(400).json({message: `no user found with id ${userId}`});
-        
-        await users.deleteOne(userObject);
+
+        await users.deleteOne({id: userId});
         return res.status(200).json({message: `${userObject.first_name} got deleted!`});
          
     }catch{
         return res.status(500).json({message: "Error fetching user"});
     }
-})
-.patch(async (req, res) =>{
+}
+
+async function UpdateUserByIdHandler(req, res){
     try{
         const userId = parseInt(req.params.id);
         const userObject = await users.findOne({id: userId});
@@ -104,9 +82,12 @@ app.route("/user/:id")
     }catch{
         return res.status(500).json({message: "Error fetching user"});
     }
-});
+}
 
-
-
-
-app.listen(PORT, ()=>{});
+module.exports = {
+    getAllUsersHandler,
+    getUserByIdHandler,
+    PostUserByIdHandler,
+    DeleteUserByIdHandler,
+    UpdateUserByIdHandler
+};

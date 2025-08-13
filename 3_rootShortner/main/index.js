@@ -5,7 +5,7 @@ const PORT = 8001;
 
 const app = express();
 
-app.use(express.json());
+app.use(express.json()); //used to parse incoming json requests
 app.use("/url", urlRoute);
 
 app.listen(PORT, () => {

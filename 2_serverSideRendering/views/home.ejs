@@ -33,18 +33,18 @@
                     <td><%= url.shortUrl %></td>
                     <td><%= url.visitHistory.length %></td>
                     <td>
-                        <button type="button" onclick="redirectAndRefresh()">Redirect</button>
+                        <button type="button" onclick="redirectAndRefresh('/url/<%= url.shortUrl %>')">Redirect</button>
                     </td>
-                    <script>
-                        function redirectAndRefresh(){
-                            window.open("/url/<%= url.shortUrl %>", "_blank");
-                            setTimeout(() => {
-                                location.reload();
-                            }, 500);
-                        }
-                    </script>
                 </tr>
             <% }) %>
+            <script>
+                function redirectAndRefresh(url){
+                    window.open(url, "_blank");
+                    setTimeout(() => {
+                        location.reload();
+                    }, 500);
+                }
+            </script>
         </tbody>
     </table>
     <form method="post" action="/url">
@@ -55,6 +55,9 @@
             placeholder="Enter Long URL"
         >
         <button type="submit"> generate </button>
+    </form>
+    <form action="/render/signin" method="get">
+        <button type="submit">Log Out</button>
     </form>
 
 </body>

@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 
-
 const urlSchema = new mongoose.Schema(
     {
         shortUrl:    { type: String, required: true, unique: true, index: true },
@@ -16,6 +15,13 @@ const urlSchema = new mongoose.Schema(
     }
 );
 
-const Url = mongoose.model("Url", urlSchema);
+const userSchema = new mongoose.Schema({
+    name:     { type: String, required: true },
+    password: { type: String, required: true },
+    email:    { type: String, required: true, unique: true },
+    urls:     [ urlSchema ]
+});
 
-module.exports = Url;
+const User = mongoose.model("User", userSchema);
+
+module.exports = User;

@@ -6,8 +6,7 @@ async function postSignUpHandler(req, res){
 
     const foundUser = await User.findOne({ email: req.body.email });
 
-    if (foundUser) {
-        console.log(foundUser);    
+    if (foundUser) {  
         return res.redirect("/render/signup"); //user already exists with this email
     }               
 
@@ -29,7 +28,7 @@ async function getSignInHandler(req, res) {
 
     const token = setUser(foundUser);
     res.cookie("sessionId", token);
-    return res.json({ token });
+    return res.redirect("/render/info");
 }
 
 module.exports = { postSignUpHandler, getSignInHandler };

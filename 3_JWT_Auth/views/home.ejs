@@ -24,6 +24,7 @@
                 <th scope="col">Short URL</th>
                 <th scope="col">Clicks</th>
                 <th scope="col">Redirect</th>
+                <th scope="col">Delete</th>
             </tr>
         </thead>
         <tbody>
@@ -35,9 +36,18 @@
                     <td>
                         <button type="button" onclick="redirectAndRefresh('/url/<%= url.shortUrl %>')">Redirect</button>
                     </td>
+                    <td>
+                        <button type="button" onclick="deleteUrl('/url/<%= url.shortUrl %>')">Delete</button>
+                    </td>
                 </tr>
             <% }) %>
             <script>
+                async function deleteUrl(shortUrl) {
+                    const response = await fetch(shortUrl, {
+                        method: 'DELETE'
+                    });
+                    location.reload();
+                }
                 function redirectAndRefresh(url){
                     window.open(url, "_blank");
                     setTimeout(() => {

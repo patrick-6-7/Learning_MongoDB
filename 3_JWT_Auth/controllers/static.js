@@ -1,8 +1,5 @@
 const USER = require("../models/user.js");
 async function renderUrlsInfo(req, res) {
-    // const sessionId = req.cookies.sessionId;
-    // const currUser = getUser(sessionId);
-
     const user = await USER.findOne({ email: req.user.email });
 
     const allUrl = user.urls;

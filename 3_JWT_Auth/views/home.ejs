@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>All URL's INFO</h1>
+    <table>
+        <thead>
+            <tr>
+                <th scope="col">Original URL</th>
+                <th scope="col">Short URL</th>
+                <th scope="col">Clicks</th>
+                <th scope="col">Redirect</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% allUrl.forEach(url => { %>
+                <tr>
+                    <td><%= url.originalUrl %></td>
+                    <td><%= url.shortUrl %></td>
+                    <td><%= url.visitHistory.length %></td>
+                    <td>
+                        <button type="button" onclick="redirectAndRefresh('/url/<%= url.shortUrl %>')">Redirect</button>
+                    </td>
+                </tr>
+            <% }) %>
+            <script>
+                function redirectAndRefresh(url){
+                    window.open(url, "_blank");
+                    setTimeout(() => {
+                        location.reload();
+                    }, 500);
+                }
+            </script>
+        </tbody>
+    </table>
+    <form method="post" action="/url">
+        <input 
+            type="text"
+            id="longUrl"
+            name="Url"
+            placeholder="Enter Long URL"
+        >
+        <button type="submit"> generate </button>
+    </form>
+    <form action="/render/signin" method="get">
+        <button type="submit">Log Out</button>
+    </form>
+
+</body>
+</html>

@@ -27,8 +27,9 @@ async function getSignInHandler(req, res) {
     if (!foundUser) return res.redirect("/render/signin"); //user does not exist
 
     const token = setUser(foundUser);
-    res.cookie("sessionId", token);
-    return res.redirect("/render/info");
+    // res.cookie("sessionId", token);
+    // return res.redirect("/render/info");
+    return res.json({ token }); 
 }
 
 module.exports = { postSignUpHandler, getSignInHandler };
